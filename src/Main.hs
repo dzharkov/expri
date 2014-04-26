@@ -77,6 +77,7 @@ command (PrintExpr expr) = do
 
 command (EvalProgram program) = do
     noDebug .= True
+    liftIO $ print program
     runProgram $ evalProgram program 
     noDebug .= False
 
@@ -150,7 +151,7 @@ request s = case s of
         
         parseCmd (stripPrefix "break " -> Just l) = do 
             if all isDigit l     
-                then return $ BreakLine (read l)
+                then return $ BreakLine ((read l) - 1)
                 else either (const $ fail "Syntax") (return . BreakExpr) $ parseExpr l
         
         parseCmd ('!':shellCmd) = return $ ShellCmd shellCmd
