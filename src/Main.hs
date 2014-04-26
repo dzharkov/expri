@@ -73,7 +73,6 @@ command :: Command -> Eval ()
 
 command (PrintExpr expr) = do
     x <- runInterpreter $ evalExpr expr
-    liftIO $ putStrLn (show x) 
 
 command (EvalProgram program) = do
     noDebug .= True
