@@ -20,12 +20,14 @@ satisfy p = Parser parseChar
     where
         parseChar :: String -> StateT Int Identity (Maybe (Char, String))
         parseChar [] = return Nothing
-        parseChar ('\n':xs) = do
+        parseChar ('\r':'\n':xs) = nextLine xs        
+        parseChar ('\n':xs) = nextLine xs        
+        parseChar (x:xs) | p x = return $ Just (x, xs)
+                         | otherwise = return $ Nothing
+        nextLine xs = do
             l <- get
             put $ l + 1
             parseChar (' ':xs)
-        parseChar (x:xs) | p x = return $ Just (x, xs)
-                         | otherwise = return $ Nothing
 
 lineNumber :: Parser Int
 lineNumber = Parser lineNumber'
