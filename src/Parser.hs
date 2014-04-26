@@ -72,7 +72,7 @@ statementsP = many (bSpaces (LinedStatement <$> lineNumber <*> statementP))
 parseLine :: Parser a -> String -> Either [String] a
 parseLine p s = case evalParser (p <* eof) s of
     (Just x) -> Right x
-    _        -> Left ["Error"]
+    _        -> Left ["Error", s]
 
 parseExpr :: String -> Either [String] Expr
 parseExpr = parseLine exprP
